@@ -1,0 +1,3 @@
+ff/logger/logtriple.php?s=testuser&k=testkey&p=message&v={"username":"testuser","message":"Hi!!"}
+ff/logger/logtriple.php?s=acjvks&k=123456&p=message&v={"username":"acjvks","message":"Hello!"}
+ff/logger/logtriple.php?s=acjvks&k=123456&p=location&v={"username":"acjvks","location":{"latitude":"43.082634","longitude":"-77.68004"}}
