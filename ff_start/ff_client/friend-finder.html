@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 <link href='https://fonts.googleapis.com/css?family=Graduate' rel='stylesheet' type='text/css'>
 
-<title>RIT Friend Finder</title>
+<title>A^2 Friend Finder</title>
 	<style>
 	*{
 		margin:0px; padding:0px;
@@ -88,8 +88,7 @@
  	}
  	
 	</style>
-	<!-- Import Google Maps -->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoR0OGoXsZeBx1pdf0dDjiZXhhFS2wH20&sensor=false"></script>
+	
 	<!-- Import jQuery -->
   	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script>
@@ -103,54 +102,10 @@
 			// CONSTANTS
 			var LOGGER_URL = "../logger/logtriple.php";
 			var FETCH_TRIPLES_URL = "../logger/fetchtriples.php";
-
-			// CLOSURE VARIABLES
-			var map;
-			var infowindow;
-			var overlays;
-			var markers = [];
 			
 			 // PUBLIC METHOD
     		function init(){
-				initMap(); 
 				initButtons();
-			}
-			
-			// PRIVATE METHODS
-			function initMap() {
-				var myOptions = {
-				  center: new google.maps.LatLng(43.083841,-77.6791),
-				  zoom: 16,
-				  mapTypeId: google.maps.MapTypeId.ROADMAP
-				};
-				// create google map 
-				 map = new google.maps.Map(document.getElementById("map_canvas"),
-					myOptions);
-			}
-			
-			function addMarker(latitude, longitude, title){
-				var position = {lat:latitude, lng:longitude};
-				var marker = new google.maps.Marker({position: position, map:map});
-				marker.title = title;
-		
-				google.maps.event.addListener(marker, 'click', function(e){
-					makeInfoWindow(this.position, this.title);
-				});
-			
-				markers.push(marker);
-			}
-			
-			function clearMarkers() {
-				//close info window if it exists
-				//loop through markers array
-				//call .setMap(null) on each marker to remove it from map
-				if(infowindow) infowindow.close();
-				for(var i = 0; i < markers.length; i++)
-				{
-					markers[i].setMap(null);
-				}
-			
-				markers = [];
 			}
 			
 			function initButtons(){
@@ -206,7 +161,9 @@
 							return; // bail out
 						}
 						var mystatus = data.status;
+						console.log(mystatus);
 						var results = data.results;
+						console.log(results);
 						var html = "<h4>status:" + mystatus + "</h4>";
 						html += "<ul>";
 						results.forEach(function(msg){
@@ -235,109 +192,19 @@
 					
 				// Zoom on Campus! Button
 				document.querySelector('#zoomOnCampusButton').onclick=function(event){
-					// WRITE CODE
-					//set the zoom level to 16
-					map.setZoom(16);
-					//center on RIT's campus
-					var campusCoords = {lat: 43.083841, lng: -77.6791};
-					map.setCenter(campusCoords);
-					
-					
-				} // end #showCampusButton.onclick
+					console.log("Do nothing zoom on campus");
+				} 
 				
 				
 				// Get My Location! Button
 				document.querySelector('#getMyLocationButton').onclick=function(event){
-					if (navigator.geolocation) {
-						navigator.geolocation.getCurrentPosition(onLocationSuccess, onLocationError);
-						document.querySelector('#status').innerHTML = 'Checking location ...';
-					} else {
-						document.querySelector('#status').innerHTML = 'location not supported';
-					}
-					
-					//actual code for this button gets done in the onLocationSuccess function
-					//because apparently the navigator methods send the position to the method
-					
+					console.log("Do nothing get my location");
 				} // end #getLocationButton.onclick
 		
 				
 				// Show Friend Locations! Button
 				document.querySelector('#showFriendLocationsButton').onclick=function(event){
-					// WRITE CODE
-					clearMarkers();
-					
-					var locationCount = 0;
-					//var urlString =  FETCH_TRIPLES_URL + "?p=message&limit=20";
-					var urlString = FETCH_TRIPLES_URL + "?p=location&limit=20";
-					console.log("url loaded = " + urlString);
-					
-					var xhr = new XMLHttpRequest();
-					xhr.onload = function(){
-						try{
-							var data = JSON.parse(xhr.responseText);
-						}catch(error){
-							document.querySelector('#status').innerHTML = "Error: " + error;
-							return; // bail out
-						}
-						
-						
-						
-						var mystatus = data.status;
-						var results = data.results;
-						//var lt;
-						//var ln;
-						var html = "<h4>status:" + mystatus + "</h4>";
-						html += "<ul>";
-						results.forEach(function(msg){
-							if(msg.value.location){
-								locationCount++;
-							}
-							html += "<li>";
-							if(msg.value){
-								html += msg.value.username;
-								html += " - ";
-								html += msg.value.location.latitude;
-								html += " - ";
-								html += msg.value.location.longitude;
-								html += " - ";
-								
-								if(msg.value.location.latitude){
-									var lt = parseFloat(msg.value.location.latitude);
-									var ln = parseFloat(msg.value.location.longitude);
-									var name = msg.value.username;
-									var pos = {
-										lat: lt,
-										lng: ln
-									};
-									console.log(ln);
-									var marker = new google.maps.Marker({position: pos, map: map});
-									//make the info window - this one is for on click
-									//google.maps.event.addListener(marker, 'click', function(e){
-									//makeInfoWindow(this.position, this.title);
-									//});
-									//marker.title = username + "<br>" + "Located at: " + latitude + "," + "<br>" + longitude;
-									var posTitle = JSON.stringify(name);
-									//makeInfoWindow(pos, posTitle);
-									addMarker(pos.lat, pos.lng, posTitle);
-								}
-								
-							}
-							html += msg.timestamp;
-							html += "</li>";
-							
-							document.querySelector('#status').innerHTML = "<strong>" + locationCount + " locations found!</strong>";
-						});
-						html += "</ul>"
-						document.querySelector('#activity').innerHTML = html;
-					} 
-					
-					xhr.onerror = function(error){
-						document.querySelector('#status').innerHTML = '<b>Error fetching messages! We are probably offline!</b>';
-					}
-		
-					xhr.open("GET", urlString, true);
-					xhr.send(null);
-				
+					console.log("Do nothing show friend locations");
 				}  // end #showFriendLocationsButton.onclick
 				
 				
@@ -352,97 +219,82 @@
 			
 			
 			function onLocationSuccess(position){
-				var latitude = position.coords.latitude;
-				var longitude = position.coords.longitude;
-				var userPosition = {lat: latitude, lng: longitude};
-				var username = document.querySelector("#username").value.trim();
-				var accuracy = position.coords.accuracy; //apparently, this is already in meters
-				// WRITE CODE
-				var marker = new google.maps.Marker({position: userPosition, map: map});
-				
-				//make the info window - this one is for on click
-				//google.maps.event.addListener(marker, 'click', function(e){
-					//makeInfoWindow(this.position, this.title);
-				//});
-				//marker.title = username + "<br>" + "Located at: " + latitude + "," + "<br>" + longitude;
-				var userTitle = username + "<br>" + "Located at: " + latitude + "," + "<br>" + longitude;
-				makeInfoWindow(userPosition, userTitle);
-		
-				//in case they need to click the marker
-				google.maps.event.addListener(marker, 'click', function(e){
-					makeInfoWindow(userPosition, userTitle);
-				});
-			
-				//don't want it to get cleared.
-				//markers.push(marker);
-				
-				//Update the #status with the accuracy and stuff
-				document.querySelector('#status').innerHTML = username + "<br>" + "Located at: " + latitude + "," + longitude + "<br>" + "(at least within a " + accuracy + " meter radius)";
-				
-				
-				
-				//JQUERY to update the tables
-				var username = $.trim($('#username').val());
-				var key = $.trim($('#key').val());
-				//var message = $.trim($('#message').val());
-				//message = encodeURIComponent(message); // encode internal spaces
-				if (username.length < 1 || key.length < 1 || message.length < 1){
-					// BAD FORM DATA
-					$('#status').html("<strong>Problem with input!</strong>");
-					return; // bail out of on "click"
-				} else {
-					// LOOKS GOOD - SEND DATA TO WEB SERVICE
-					//$('#status').html("<strong>Posting message to server</strong>");
-					//var jsonMessage = {"username": username, "message":message};
-					//var jsonMessage = {"username": username};//, "location": userPosition};
-					//jsonMessage = JSON.stringify(jsonMessage);
-					/*
-						this next part idk if it's the best way to do this but it works and takes in all the parameters
-						rather than them being hard coded.
-						How it works is: the username is optimized for any spaces, then a giant string that creates the
-						field for "v" is created.  This was such a pain to figure out, because I couldn't figure out the
-						order to put everything into the url, and then I had a problem with the encodeURI method because
-						it was appending the space character things to my entire object.  The json stringify I had to remove
-						as well, because it got rid of the location object of the url and made it not work.  IT WORKS LIKE THIS THOUGH :)
-					*/
-					var jsonUser = encodeURIComponent(username);
-					var jsonMessage = "{\"username\":\"" + jsonUser + "\",\"location\":{\"latitude\":\"" + latitude + "\",\"longitude\":\"" + longitude + "\"}}";					
-					//var urlString =  LOGGER_URL + "?p=message&s=" + username + "&k=" + key + "&v=" + jsonMessage;
-					var urlString = LOGGER_URL + "?s=" + username + "&k=" + key + "&p=location&v=" + jsonMessage;
-					console.log("url loaded = " + urlString);
-					$.ajax({
-						url: urlString,
-						success: function(data){
-						//	console.log("data.status=" + data.status);
-							if(data.status == "success"){
-								data = data.status + " : " + data.description + " : ip=" + data.ip;
-							} else {
-								data = data.status + " : " + data.description;
-							}
-							//$('#status').html("<b>Response = " + data + "</b>");
-						}, // end success
-						error: function(jqXHR,textStatus,errorThrown){
-							$('#status').html("<b>Error = " + textStatus + " - " + errorThrown + "</b>");
-						} // end error
-					}); // end ajax()
-				} // end if
+				// var latitude = position.coords.latitude;
+// 				var longitude = position.coords.longitude;
+// 				var userPosition = {lat: latitude, lng: longitude};
+// 				var username = document.querySelector("#username").value.trim();
+// 				var accuracy = position.coords.accuracy; //apparently, this is already in meters
+// 				// WRITE CODE
+// 				var marker = new google.maps.Marker({position: userPosition, map: map});
+// 				
+// 				//make the info window - this one is for on click
+// 				//google.maps.event.addListener(marker, 'click', function(e){
+// 					//makeInfoWindow(this.position, this.title);
+// 				//});
+// 				//marker.title = username + "<br>" + "Located at: " + latitude + "," + "<br>" + longitude;
+// 				var userTitle = username + "<br>" + "Located at: " + latitude + "," + "<br>" + longitude;
+// 				makeInfoWindow(userPosition, userTitle);
+// 		
+// 				//in case they need to click the marker
+// 				google.maps.event.addListener(marker, 'click', function(e){
+// 					makeInfoWindow(userPosition, userTitle);
+// 				});
+// 			
+// 				//don't want it to get cleared.
+// 				//markers.push(marker);
+// 				
+// 				//Update the #status with the accuracy and stuff
+// 				document.querySelector('#status').innerHTML = username + "<br>" + "Located at: " + latitude + "," + longitude + "<br>" + "(at least within a " + accuracy + " meter radius)";
+// 				
+// 				
+// 				
+// 				//JQUERY to update the tables
+// 				var username = $.trim($('#username').val());
+// 				var key = $.trim($('#key').val());
+// 				//var message = $.trim($('#message').val());
+// 				//message = encodeURIComponent(message); // encode internal spaces
+// 				if (username.length < 1 || key.length < 1 || message.length < 1){
+// 					// BAD FORM DATA
+// 					$('#status').html("<strong>Problem with input!</strong>");
+// 					return; // bail out of on "click"
+// 				} else {
+// 					// LOOKS GOOD - SEND DATA TO WEB SERVICE
+// 					//$('#status').html("<strong>Posting message to server</strong>");
+// 					//var jsonMessage = {"username": username, "message":message};
+// 					//var jsonMessage = {"username": username};//, "location": userPosition};
+// 					//jsonMessage = JSON.stringify(jsonMessage);
+// 					/*
+// 						this next part idk if it's the best way to do this but it works and takes in all the parameters
+// 						rather than them being hard coded.
+// 						How it works is: the username is optimized for any spaces, then a giant string that creates the
+// 						field for "v" is created.  This was such a pain to figure out, because I couldn't figure out the
+// 						order to put everything into the url, and then I had a problem with the encodeURI method because
+// 						it was appending the space character things to my entire object.  The json stringify I had to remove
+// 						as well, because it got rid of the location object of the url and made it not work.  IT WORKS LIKE THIS THOUGH :)
+// 					*/
+// 					var jsonUser = encodeURIComponent(username);
+// 					var jsonMessage = "{\"username\":\"" + jsonUser + "\",\"location\":{\"latitude\":\"" + latitude + "\",\"longitude\":\"" + longitude + "\"}}";					
+// 					//var urlString =  LOGGER_URL + "?p=message&s=" + username + "&k=" + key + "&v=" + jsonMessage;
+// 					var urlString = LOGGER_URL + "?s=" + username + "&k=" + key + "&p=location&v=" + jsonMessage;
+// 					console.log("url loaded = " + urlString);
+// 					$.ajax({
+// 						url: urlString,
+// 						success: function(data){
+// 						//	console.log("data.status=" + data.status);
+// 							if(data.status == "success"){
+// 								data = data.status + " : " + data.description + " : ip=" + data.ip;
+// 							} else {
+// 								data = data.status + " : " + data.description;
+// 							}
+// 							//$('#status').html("<b>Response = " + data + "</b>");
+// 						}, // end success
+// 						error: function(jqXHR,textStatus,errorThrown){
+// 							$('#status').html("<b>Error = " + textStatus + " - " + errorThrown + "</b>");
+// 						} // end error
+// 					}); // end ajax()
+// 				} // end if
 				
 			}
-		
-	
-		
-			// PRIVATE HELPER METHODS
-			function makeInfoWindow(position,msg){
-				 // Close old info window and make new one
-				 if(infowindow) infowindow.close();
-				 infowindow = new google.maps.InfoWindow({
-					  map: map,
-					  position: position,
-					  content: "<strong>" + msg + "</strong>"
-				 });
-			}
-			
-				
 				
 			// RETURN PUBLIC INTERFACE
 			return{
@@ -458,7 +310,7 @@
 <body>
 	<div id="content">
 		<header> 
-			<h1>RIT Friend Finder</h1>
+			<h1>A^2 Friend Finder</h1>
 		</header>
 		
 		<section id="controls"> 
@@ -520,7 +372,7 @@
 		</section>
 		
 		<footer> 
-		<p>IGME-330 Rich Media Web App Dev I</p>
+		<p>This is ours we swear.</p>
 		</footer>
 		
 	</div> <!-- END #content -->
